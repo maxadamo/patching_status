@@ -33,7 +33,8 @@ class patching_status::install (
       pip3 install -U pip setuptools
       pip3 install requests",
     unless  => "source ${destination}/patching_venv/bin/activate
-      python3 -c \"import requests\'";
+      python3 -c \"import requests\'",
+    path => '/bin:/sbin:/usr/bin:/usr/sbin';
   }
 
   cron { 'patching_status':
