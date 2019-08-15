@@ -36,10 +36,10 @@ class patching_status (
   Variant[Stdlib::IP::Address::Nosubnet, String] $puppetdb,
   Stdlib::Absolutepath $destination,
   Integer $puppetdb_port = $patching_status::params::puppetdb_port,
-  String $user           = $patching_status::params::user,
-  String $group          = $patching_status::params::group,
-  String $cron_hour      = $patching_status::params::cron_hour,
-  String $cron_minute    = $patching_status::params::cron_minute,
+  String $user = $patching_status::params::user,
+  String $group = $patching_status::params::group,
+  Variant[String, Integer] $cron_hour = $patching_status::params::cron_hour,
+  Variant[String, Integer] $cron_minute = $patching_status::params::cron_minute,
   Enum['ensure_packages', 'package'] $install_method = $patching_status::params::install_method,
 ) inherits patching_status::params {
 

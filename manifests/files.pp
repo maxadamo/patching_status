@@ -37,7 +37,6 @@ class patching_status::install (
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_certname' });
     '/var/repositories/patching/index_lsbdistdescription.html':
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_lsbdistdescription' });
-
   }
 
 }
