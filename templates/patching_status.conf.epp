@@ -1,6 +1,6 @@
 [patching]
 
-destination = <%= $destination %>
+web_base = <%= $web_base %>
 puppetdb = <%= $puppetdb %>
 puppetdb_port = <%= $puppetdb_port %>
 subkeys_list = [

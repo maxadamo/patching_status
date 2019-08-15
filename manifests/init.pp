@@ -5,9 +5,12 @@
 #
 # === Parameters & Variables
 #
-# [*destination*] <Stdlib::Absolutepath>
-#   default: undef (undef fails. This is the path that will be accessed
+# [*web_base*] <Stdlib::Absolutepath>
+#   default: undef (This is the path that will be accessed
 #            by your webserver to display the page)
+#
+# [*python_base*] <Stdlib::Absolutepath>
+#   default: undef (This is the python virtualenv path)
 #
 # [*user*] <String>
 #   default: root (username to assign the files to)
@@ -34,7 +37,8 @@
 #
 class patching_status (
   Variant[Stdlib::IP::Address::Nosubnet, String] $puppetdb,
-  Stdlib::Absolutepath $destination,
+  Stdlib::Absolutepath $web_base,
+  Stdlib::Absolutepath $python_base,
   Integer $puppetdb_port = $patching_status::params::puppetdb_port,
   String $user = $patching_status::params::user,
   String $group = $patching_status::params::group,
@@ -59,7 +63,7 @@ class patching_status (
   class {
     'patching_status::install':
       install_method => $install_method,
-      destination    => $destination,
+      destination    => $python_base,
       user           => $user,
       cron_hour      => $cron_hour,
       cron_minute    => $cron_minute;

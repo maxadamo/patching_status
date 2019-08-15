@@ -3,7 +3,7 @@
 #
 class patching_status::install (
   $install_method,
-  $destination,
+  $python_base,
   $user,
   $cron_hour,
   $cron_minute,
@@ -29,18 +29,18 @@ class patching_status::install (
   exec { 'create_patching_status_venv':
     path    => '/bin:/sbin:/usr/bin:/usr/sbin',
     user    => $user,
-    command => "python3 -m venv ${destination}/patching_venv
-      source ${destination}/patching_venv/bin/activate
+    command => "python3 -m venv ${python_base}/patching_venv
+      source ${python_base}/patching_venv/bin/activate
       pip3 install -U pip setuptools
       pip3 install requests",
-    unless  => "test -f ${destination}/patching_venv/bin/python3 &&\
-      ${destination}/patching_venv/bin/python3 -c \"import requests\"";
+    unless  => "test -f ${python_base}/patching_venv/bin/python3 &&\
+      ${python_base}/patching_venv/bin/python3 -c \"import requests\"";
   }
 
   cron { 'patching_status':
     ensure  => present,
     user    => $user,
-    command => "${destination}/patching_venv/bin/puppetdb_json.py",
+    command => "${python_base}/patching_venv/bin/puppetdb_json.py",
     hour    => $cron_hour,
     minute  => $cron_minute;
   }

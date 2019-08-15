@@ -28,11 +28,11 @@ def write_file(file_name, file_content, file_path, dump=True):
 if __name__ == "__main__":
     TIMENOW = str(datetime.datetime.now()).split('.')[0]
     CONFIG = configparser.RawConfigParser()
-    CONFIG.read('<%= $destination %>/.patching_status.conf')
+    CONFIG.read('<%= $python_base %>/.patching_status.conf')
 
     PUPPETDB = CONFIG.get('patching', 'puppetdb')
     PUPPETDB_PORT = CONFIG.get('patching', 'puppetdb_port')
-    DESTINATION = CONFIG.get('patching', 'destination')
+    WEB_BASE = CONFIG.get('patching', 'web_base')
     SUBKEYS_LIST = CONFIG.get('patching', 'subkeys_list')
     PARAMS = '{"query": ["and",["=", "name", "os_patching"]]}'
     PARAMS_OS = '{"query": ["and",["=", "name", "lsbdistdescription"]]}'
@@ -73,9 +73,9 @@ if __name__ == "__main__":
     TIMESTAMP_JS = """var mytimestamp = "This report was generated at {} GMT"
 document.getElementById("factstimestamp").innerHTML = mytimestamp;\n""".format(TIMENOW)
 
-    write_file('puppetdb_updates.json', SORTED_UPDT, DESTINATION)
-    write_file('puppetdb_sec_updates.json', SORTED_SECUPD, DESTINATION)
-    write_file('puppetdb_reboot.json', SORTED_REBOOT, DESTINATION)
-    write_file('puppetdb_certname.json', SORTED_CERTNAME, DESTINATION)
-    write_file('puppetdb_lsbdistdescription.json', SORTED_LSBDESC, DESTINATION)
-    write_file('timestamp.js', TIMESTAMP_JS, DESTINATION, dump=None)
+    write_file('puppetdb_updates.json', SORTED_UPDT, WEB_BASE)
+    write_file('puppetdb_sec_updates.json', SORTED_SECUPD, WEB_BASE)
+    write_file('puppetdb_reboot.json', SORTED_REBOOT, WEB_BASE)
+    write_file('puppetdb_certname.json', SORTED_CERTNAME, WEB_BASE)
+    write_file('puppetdb_lsbdistdescription.json', SORTED_LSBDESC, WEB_BASE)
+    write_file('timestamp.js', TIMESTAMP_JS, WEB_BASE, dump=None)
