@@ -36,21 +36,6 @@ class patching_status::install (
       python3 -c \"import requests\'";
   }
 
-  file {
-    default:
-      ensure => present,
-      mode   => '0755',
-      owner  => $user,
-      group  => $group;
-    $destination:
-      ensure  => directory,
-      source  => "puppet:///modules/${module_name}/patching";
-    "${destination}/patching_venv/bin/puppetdb_json.py":
-      source => "puppet:///modules/${module_name}/puppetdb_json.py";
-    "${destination}/.patching_status.conf":
-      content => epp("${module_name}/patching_status.conf.epp", { destination => $destination });
-  }
-
   cron { 'patching_status':
     ensure  => present,
     command => "${destination}/patching_venv/bin/puppetdb_json.py",

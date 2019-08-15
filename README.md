@@ -17,7 +17,7 @@ This module will only copy the files that will be accessed by a web server.
 ## Requirements
 
 * Your web server of choice points to the destination directory
-* Your systems send the patch status to the PuppetDB using the module `albatrossflavour/os_patching`
+* Your systems are already sending the patch status to the PuppetDB using the module `albatrossflavour/os_patching`
 
 ## Setup
 
@@ -50,6 +50,8 @@ class { '::patching_status':
 Mountable: iQuery json to table by [Guilherme Augusto Madaleno](https://github.com/guimadaleno/mountable)
 
 Web Page spinner: by [Pace](https://github.hubspot.com/pace/docs/welcome/)
+
+PuppetForge module: [os_patching](https://forge.puppet.com/albatrossflavour/os_patching)
 
 ## Limitations
 

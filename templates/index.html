@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Servers Patching Status</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+  <style>
+    .table {
+      margin-bottom: 0;
+    }
+  </style>
+  <script src="progress.js"></script>
+  <link href="progress.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="table-responsive">
+    <h1>Patching Status</h1>
+    <p id="factstimestamp">This report was generated a very long time ago, hence it could be outdated</p>
+    <hr>
+    <div class="well">
+      <form action="#">
+        <table class="table" id="patching">
+          <thead>
+            <tr>
+              <th><a href="index_certname.html">Cert name</a></th>
+              <th><a href="index_lsbdistdescription.html">OS version</a></th>
+              <th><a href="index.html">Updt count</a></th>
+              <th>Updates list</th>
+              <th><a href="index_sec_updates.html">Sec updt count</th>
+              <th>Sec updates list</th>
+              <th><a href="index_reboot.html">Reboot Required</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="mountable-model">
+              <td><input type="text" name="certname[]" class="form-control" readonly></td>
+              <td><input type="text" name="lsbdistdescription[]" class="form-control" readonly></td>
+              <td><input type="text" name="package_update_count[]" class="form-control" readonly></td>
+              <td>
+                <select name="package_updates[]" class="form-control">
+                  <option value=""></option>
+                </select>
+              </td>
+              <td><input type="text" name="security_package_update_count[]" class="form-control" readonly></td>
+              <td>
+                <select name="security_package_updates[]" class="form-control">
+                  <option value=""></option>
+                </select>
+              </td>
+              <td nowrap="nowrap" style="vertical-align: middle;">
+                <input type="checkbox" name="reboot_required[]" value="N" onclick="return false;"> N&nbsp;
+                <input type="checkbox" name="reboot_required[]" value="Y" onclick="return false;"> Y&nbsp;
+              </td>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+          </tfoot>
+        </table>
+      </form>
+    </div>
+    <p>Credits: <a href="https://github.com/guimadaleno/mountable" target="_blank">here</a>.</p>
+  </div>
+</body>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="mountable.js"></script>
+<script src="timestamp.js"></script>
+<script>
+  $(document).ready(function () {
+    /* Activates the complete example */
+    $.getJSON("<%= $json_file %>.json", function (mydata) {
+      $('#patching').mounTable(mydata, {
+        /* The model class */
+        model: '.mountable-model',
+        /* No console messages */
+        noDebug: false,
+      });
+    });
+  });
+</script>
+
+</html>
