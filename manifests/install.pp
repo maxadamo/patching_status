@@ -29,11 +29,10 @@ class patching_status::install (
 
   exec { 'create_patching_status_venv':
     command => "python3 -m venv ${destination}/patching_venv
-      . ${destination}/patching_venv/bin/activate
+      source ${destination}/patching_venv/bin/activate
       pip3 install -U pip setuptools
       pip3 install requests",
-    unless  => ". ${destination}/patching_venv/bin/activate
-      python3 -c \"import requests\'",
+    unless  => "${destination}/patching_venv/bin/python3 -c \"import requests\'",
     path => '/bin:/sbin:/usr/bin:/usr/sbin';
   }
 
