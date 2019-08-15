@@ -55,15 +55,21 @@ class patching_status (
     fail("${facts['os']['family']} ${facts['lsbdistrelease']} is not supported")
   }
 
-  class { 'patching_status::install':
-    install_method => $install_method,
-    destination    => $destination,
-    user           => $user,
-    group          => $group,
-    cron_hour      => $cron_hour,
-    cron_minute    => $cron_minute,
-    puppetdb       => $puppetdb,
-    puppetdb_port  => $puppetdb_port;
+  # here we go:
+  class {
+    'patching_status::install':
+      install_method => $install_method,
+      destination    => $destination,
+      user           => $user,
+      group          => $group,
+      cron_hour      => $cron_hour,
+      cron_minute    => $cron_minute;
+    'patching_status::files':
+      destination   => $destination,
+      user          => $user,
+      group         => $group,
+      puppetdb      => $puppetdb,
+      puppetdb_port => $puppetdb_port;
   }
 
 }
