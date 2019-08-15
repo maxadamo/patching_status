@@ -74,7 +74,7 @@ class patching_status (
       cron_hour      => $cron_hour,
       cron_minute    => $cron_minute;
     'patching_status::files':
-      web_base       => $web_base,
+      web_base      => $web_base,
       python_base   => $python_base,
       user          => $user,
       group         => $group,

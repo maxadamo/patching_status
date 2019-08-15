@@ -6,13 +6,14 @@
 1. [Requirements](#requirements)
 1. [Setup - The basics of getting started with galera_proxysql](#setup)
     * [Setting up patching_status](#setting-up-patching_status)
+1. [Screenshot](#screenshot)
 1. [Credits - jQuery and CSS acknowledgements](#credits)
 1. [Limitations - OS compatibility, etc.](#limitations)
 
 ## Description
 
-The modules will set up a page which shows the patching status of your systems, based on the data that you feed on the puppetDB through the puppet module: albatrossflavour/os_patching
-This module will only copy the files that will be accessed by a web server.
+This module sets up a the web pages to show the patching status of your systems. The data are fed to PuppetDB through the scripts provided by the module: albatrossflavour/os_patching. This modules pulls the data from the PuppetDB and convert them in HTML format.
+The module will only copy the files that will be accessed by a web server.
 
 ## Requirements
 
@@ -23,36 +24,34 @@ This module will only copy the files that will be accessed by a web server.
 
 ### Setting up patching_status
 
-Sensitive type for passwords is not mandatory, but it's recommended. If it's not being used the module will emit a notifycation.
-
-To setup the web page:
+This example will setup the web page:
 
 ```puppet
 class { '::patching_status':
-  Optional[Stdlib::Absolutepath] $destination = undef,
-  String $user = $patching_status::params::user,
-  String $group = $patching_status::params::group,
-  String $cron_hour = $patching_status::params::cron_hour,
-  String $cron_minute = $patching_status::params::cron_minute,
-  Enum['ensure_packages', 'package'] $install_method = $patching_status::params::install_method,
-
-  web_base        => /virtualenv/directory,  # Mandatory
-  python_base     => /webserver/directory,   # Mandatory
-  puppetdb        => '192.168.1.10'          # Mandatory (ip or fqdn)
-  puppetdb_port   => 8080                    # Optional
-  user            => 'root',                 # Optional
-  group           => 'root,                  # Optional
-  cron_hour       => '*',                    # Optional
-  cron_minutes    => fqdn_rand('60'),        # Optional
-  ensure_packages => 'package';              # Optional
+  web_base    => /virtualenv/directory,
+  python_base => /webserver/directory,
+  puppetdb    => '192.168.1.10';
 }
 ```
+
+Other parameters include:
+
+* puppetdb port (default: 8080)
+* cron_hour (default: every hour)
+* cron_minute (default: once in 1 hour)
+* user (default: root. User to assign the files to and install the cron job)
+* group (default: root. Group to assign the files to)
+* install_method (default: ensure_packages. You can choose between `ensure_packages` and `package`. You can try the default first)
+
+## Screenshot
+
+![Screenshot N/A](https://wiki.geant.org/download/attachments/126981072/patching_status.png  "Patching Status")
 
 ## Credits
 
 Mountable: iQuery json to table by [Guilherme Augusto Madaleno](https://github.com/guimadaleno/mountable)
 
-Web Page spinner: by [Pace](https://github.hubspot.com/pace/docs/welcome/)
+Spinner: JavaScript by [Pace](https://github.hubspot.com/pace/docs/welcome/)
 
 PuppetForge module: [os_patching](https://forge.puppet.com/albatrossflavour/os_patching)
 

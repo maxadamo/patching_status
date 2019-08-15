@@ -2,11 +2,16 @@
   "name": "maxadamo-patching_status",
   "version": "0.1.0",
   "author": "Massimiliano Adamo <maxadamo@gmail.com>",
-  "summary": "",
+  "summary": "shows patching status as web page",
   "license": "GPL-3.0",
-  "source": "",
+  "source": "https://github.com/maxadamo/patching_status",
+  "project_page": "https://github.com/maxadamo/patching_status",
+  "issues_url": "https://github.com/maxadamo/patching_status/issues",
   "dependencies": [
-
+    {
+      "name": "albatrossflavour-os_patching",
+      "version_requirement": ">= 0.8.0 <= 0.11.2"
+    }
   ],
   "operatingsystem_support": [
     {
@@ -22,21 +27,15 @@
       ]
     },
     {
-      "operatingsystem": "RedHat",
-      "operatingsystemrelease": [
-        "8"
-      ]
-    },
-    {
       "operatingsystem": "Scientific",
       "operatingsystemrelease": [
         "7"
       ]
     },
     {
-      "operatingsystem": "Debian",
+      "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "9"
+        "16.04"
       ]
     },
     {
@@ -49,7 +48,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.10.0 < 7.0.0"
+      "version_requirement": ">= 5.3.2 < 7.0.0"
     }
   ],
   "pdk-version": "1.12.0",
