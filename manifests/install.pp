@@ -27,13 +27,14 @@ class patching_status::install (
   }
 
   exec { 'create_patching_status_venv':
+    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+    user    => $user,
     command => "python3 -m venv ${destination}/patching_venv
       source ${destination}/patching_venv/bin/activate
       pip3 install -U pip setuptools
       pip3 install requests",
     unless  => "test -f ${destination}/patching_venv/bin/python3 &&\
-      ${destination}/patching_venv/bin/python3 -c \"import requests\"",
-    path    => '/bin:/sbin:/usr/bin:/usr/sbin';
+      ${destination}/patching_venv/bin/python3 -c \"import requests\"";
   }
 
   cron { 'patching_status':
