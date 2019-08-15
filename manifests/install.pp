@@ -5,7 +5,6 @@ class patching_status::install (
   $install_method,
   $destination,
   $user,
-  $group,
   $cron_hour,
   $cron_minute,
   $packages_list = $patching_status::params::packages_list,
@@ -39,6 +38,7 @@ class patching_status::install (
 
   cron { 'patching_status':
     ensure  => present,
+    user    => $user,
     command => "${destination}/patching_venv/bin/puppetdb_json.py",
     hour    => $cron_hour,
     minute  => $cron_minute;

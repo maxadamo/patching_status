@@ -61,7 +61,6 @@ class patching_status (
       install_method => $install_method,
       destination    => $destination,
       user           => $user,
-      group          => $group,
       cron_hour      => $cron_hour,
       cron_minute    => $cron_minute;
     'patching_status::files':
