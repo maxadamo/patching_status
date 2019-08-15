@@ -12,7 +12,6 @@ class patching_status::files (
   file {
     default:
       ensure  => present,
-      mode    => '0644',
       owner   => $user,
       group   => $group,
       require => Exec['create_patching_status_venv'];
