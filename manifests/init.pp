@@ -6,11 +6,17 @@
 # === Parameters & Variables
 #
 # [*web_base*] <Stdlib::Absolutepath>
-#   default: undef (This is the path that will be accessed
+#   default: not set (This is the path that will be accessed
 #            by your webserver to display the page)
 #
 # [*python_base*] <Stdlib::Absolutepath>
-#   default: undef (This is the python virtualenv path)
+#   default: not set (This is the python virtualenv path)
+#
+# [*puppetdb*] <IP, String>
+#   default: not set (puppetDB IP or FQDN)
+#
+# [*puppetdb_port*] <Integer>
+#   default: 8080 (puppetDB TCP port)
 #
 # [*user*] <String>
 #   default: root (username to assign the files to)
@@ -63,13 +69,13 @@ class patching_status (
   class {
     'patching_status::install':
       install_method => $install_method,
-      python_base    => $python_base,
       web_base       => $web_base,
       user           => $user,
       cron_hour      => $cron_hour,
       cron_minute    => $cron_minute;
     'patching_status::files':
       python_base   => $python_base,
+      python_base    => $python_base,
       user          => $user,
       group         => $group,
       puppetdb      => $puppetdb,
