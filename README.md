@@ -37,6 +37,8 @@ class { '::patching_status':
   Enum['ensure_packages', 'package'] $install_method = $patching_status::params::install_method,
 
   destination     => /destination/directory, # Mandatory
+  puppetdb        => '192.168.1.10'          # Mandatory (ip or fqdn)
+  puppetdb_port   => 8080                    # Optional
   user            => 'root',                 # Optional
   group           => 'root,                  # Optional
   cron_hour       => '*',                    # Optional
