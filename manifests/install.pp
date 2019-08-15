@@ -32,7 +32,7 @@ class patching_status::install (
       pip3 install -U pip setuptools
       pip3 install requests",
     unless  => "test -f ${destination}/patching_venv/bin/python3 &&\
-      ${destination}/patching_venv/bin/python3 -c \"import requests\'",
+      ${destination}/patching_venv/bin/python3 -c \"import requests\"",
     path    => '/bin:/sbin:/usr/bin:/usr/sbin';
   }
 
