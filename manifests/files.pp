@@ -19,7 +19,6 @@ class patching_status::files (
     $destination:
       ensure  => directory,
       recurse => true,
-      mode    => '0755',
       source  => "puppet:///modules/${module_name}/patching";
     "${destination}/patching_venv/bin/puppetdb_json.py":
       mode    => '0755',
