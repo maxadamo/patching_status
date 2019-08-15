@@ -12,14 +12,16 @@ class patching_status::files (
   file {
     default:
       ensure  => present,
-      mode    => '0755',
+      mode    => '0644',
       owner   => $user,
       group   => $group,
       require => Exec['create_patching_status_venv'];
     $destination:
       ensure => directory,
+      mode   => '0755',
       source => "puppet:///modules/${module_name}/patching";
     "${destination}/patching_venv/bin/puppetdb_json.py":
+      mode    => '0755',
       source => "puppet:///modules/${module_name}/puppetdb_json.py";
     "${destination}/.patching_status.conf":
       content => epp("${module_name}/patching_status.conf.epp", {
