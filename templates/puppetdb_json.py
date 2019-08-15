@@ -28,7 +28,7 @@ def write_file(file_name, file_content, file_path, dump=True):
 if __name__ == "__main__":
     TIMENOW = str(datetime.datetime.now()).split('.')[0]
     CONFIG = configparser.RawConfigParser()
-    CONFIG.read('common_kit.config.CRED_CONF')
+    CONFIG.read('<%= $destination %>')
 
     PUPPETDB = CONFIG.get('patching', 'puppetdb')
     PUPPETDB_PORT = CONFIG.get('patching', 'puppetdb_port')

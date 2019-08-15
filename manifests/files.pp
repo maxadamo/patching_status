@@ -22,7 +22,7 @@ class patching_status::files (
       source => "puppet:///modules/${module_name}/patching";
     "${destination}/patching_venv/bin/puppetdb_json.py":
       mode    => '0755',
-      source => "puppet:///modules/${module_name}/puppetdb_json.py";
+      content => epp("${module_name}/puppetdb_json.py.epp", { destination => $destination });
     "${destination}/.patching_status.conf":
       content => epp("${module_name}/patching_status.conf.epp", {
         destination   => $destination,
