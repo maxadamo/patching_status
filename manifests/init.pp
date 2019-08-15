@@ -69,13 +69,13 @@ class patching_status (
   class {
     'patching_status::install':
       install_method => $install_method,
-      web_base       => $web_base,
+      python_base    => $python_base,
       user           => $user,
       cron_hour      => $cron_hour,
       cron_minute    => $cron_minute;
     'patching_status::files':
+      web_base       => $web_base,
       python_base   => $python_base,
-      python_base    => $python_base,
       user          => $user,
       group         => $group,
       puppetdb      => $puppetdb,
