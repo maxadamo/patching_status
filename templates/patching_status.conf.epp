@@ -1,0 +1,11 @@
+[patching]
+
+web_base = <%= $web_base %>
+puppetdb = <%= $puppetdb %>
+puppetdb_port = <%= $puppetdb_port %>
+subkeys_list = [
+    'security_package_updates',
+    'package_update_count',
+    'package_updates',
+    'security_package_update_count'
+    ]
