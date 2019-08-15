@@ -1,7 +1,13 @@
 # == Class: patching_status
 #
 #
-class patching_status::install ($destination, $user, $group) {
+class patching_status::install (
+  $destination,
+  $user,
+  $group,
+  $puppetdb,
+  $puppetdb_port
+) {
 
   file {
     default:
@@ -16,7 +22,11 @@ class patching_status::install ($destination, $user, $group) {
     "${destination}/patching_venv/bin/puppetdb_json.py":
       source => "puppet:///modules/${module_name}/puppetdb_json.py";
     "${destination}/.patching_status.conf":
-      content => epp("${module_name}/patching_status.conf.epp", { destination => $destination });
+      content => epp("${module_name}/patching_status.conf.epp", {
+        destination   => $destination,
+        puppetdb      => $puppetdb,
+        puppetdb_port => $puppetdb_port,
+      });
     '/var/repositories/patching/index.html':
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_updates' });
     '/var/repositories/patching/index_sec_updates.html':
