@@ -29,15 +29,15 @@ class patching_status::files (
         puppetdb      => $puppetdb,
         puppetdb_port => $puppetdb_port,
       });
-    "${python_base}/index.html":
+    "${web_base}/index.html":
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_updates' });
-    "${python_base}//index_sec_updates.html":
+    "${web_base}//index_sec_updates.html":
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_sec_updates' });
-    "${python_base}/index_reboot.html":
+    "${web_base}/index_reboot.html":
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_reboot' });
-    "${python_base}/index_certname.html":
+    "${web_base}/index_certname.html":
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_certname' });
-    "${python_base}/index_lsbdistdescription.html":
+    "${web_base}/index_lsbdistdescription.html":
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_lsbdistdescription' });
   }
 
