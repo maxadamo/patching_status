@@ -8,16 +8,16 @@ class patching_status::install (
   $group,
   $cron_hour,
   $cron_minute,
-  $packackges_list = $patching_status::params::packackges_list,
+  $packages_list = $patching_status::params::packages_list,
 ) inherits patching_status::params {
 
-  if $install_method == 'ensure_package' {
-    ensure_packages($packackges_list, {
+  if $install_method == 'ensure_packages' {
+    ensure_packages($packages_list, {
       'ensure' => 'installed',
       'before' => Exec['create_patching_status_venv']
     })
   } else {
-    $packackges_list.each | $package_item | {
+    $packages_list.each | $package_item | {
       unless defined(Package[$package_item]) {
         package { $package_item:
           ensure => installed,
