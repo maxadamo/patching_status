@@ -11,7 +11,7 @@
 
 ## Description
 
-The modules will set up a page which shows the patching status, based on the data that you feed on the puppetDB through the puppet module: albatrossflavour/os_patching
+The modules will set up a page which shows the patching status of your systems, based on the data that you feed on the puppetDB through the puppet module: albatrossflavour/os_patching
 This module will only copy the files that will be accessed by a web server.
 
 ## Requirements
