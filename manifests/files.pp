@@ -1,7 +1,7 @@
-# == Class: patching_status
+# == Class: patching_status::files
 #
 #
-class patching_status::install (
+class patching_status::files (
   $destination,
   $user,
   $group,

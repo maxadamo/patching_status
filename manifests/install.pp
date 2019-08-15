@@ -1,4 +1,4 @@
-# == Class: patching_status
+# == Class: patching_status::install
 #
 #
 class patching_status::install (
