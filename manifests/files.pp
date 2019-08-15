@@ -20,7 +20,7 @@ class patching_status::files (
       ensure  => directory,
       recurse => true,
       source  => "puppet:///modules/${module_name}/patching";
-    "${python_base}/patching_venv/bin/puppetdb_json.py":
+    "${python_base}/bin/puppetdb_json.py":
       mode    => '0755',
       content => epp("${module_name}/puppetdb_json.py.epp", { python_base => $python_base });
     "${python_base}/.patching_status.conf":
