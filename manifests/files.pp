@@ -17,9 +17,10 @@ class patching_status::files (
       group   => $group,
       require => Exec['create_patching_status_venv'];
     $destination:
-      ensure => directory,
-      mode   => '0755',
-      source => "puppet:///modules/${module_name}/patching";
+      ensure  => directory,
+      recurse => true,
+      mode    => '0755',
+      source  => "puppet:///modules/${module_name}/patching";
     "${destination}/patching_venv/bin/puppetdb_json.py":
       mode    => '0755',
       content => epp("${module_name}/puppetdb_json.py.epp", { destination => $destination });
