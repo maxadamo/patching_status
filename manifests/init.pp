@@ -9,7 +9,7 @@
 #   default: not set (This is the path that will be accessed
 #            by your webserver to display the page)
 #
-# [*python_base*] <Stdlib::Absolutepath>
+# [*script_base*] <Stdlib::Absolutepath>
 #   default: not set (This is the python virtualenv path)
 #
 # [*puppetdb*] <IP, String>
@@ -30,10 +30,6 @@
 # [*cron_minute*] <String>
 #   default: fqdn_rand() (once in 1 hour)
 #
-# [*install_method*] <Enum['ensure_packages', 'package']>
-#   default: ensure_packages (to avoid conflicts with your actual configuration
-#            you can change to packages method)
-#
 # === Credits
 #
 # Mountable: jQuery module to create a table from a json
@@ -44,14 +40,13 @@
 class patching_status (
   Variant[Stdlib::IP::Address::Nosubnet, String] $puppetdb,
   Stdlib::Absolutepath $web_base,
-  Stdlib::Absolutepath $python_base,
-  Integer $puppetdb_port = $patching_status::params::puppetdb_port,
-  String $user = $patching_status::params::user,
-  String $group = $patching_status::params::group,
-  Variant[String, Integer] $cron_hour = $patching_status::params::cron_hour,
-  Variant[String, Integer] $cron_minute = $patching_status::params::cron_minute,
-  Enum['ensure_packages', 'package'] $install_method = $patching_status::params::install_method,
-) inherits patching_status::params {
+  Stdlib::Absolutepath $script_base,
+  Integer $puppetdb_port = 8080,
+  String $user = 'root',
+  String $group = 'root',
+  Variant[String, Integer] $cron_hour = '*',
+  Variant[String, Integer] $cron_minute = fqdn_rand(60, $module_name),
+) {
 
   # sanity checks
   if $facts['os']['family'] == 'RedHat' {
@@ -59,27 +54,72 @@ class patching_status (
       fail('CentOS/RedHat 6 are not supported')
     }
   }
-  elsif $facts['os']['name'] == 'Ubuntu' {
+  elsif $facts['os']['family'] == 'Debian' {
     # we're good 
   } else {
     fail("${facts['os']['family']} ${facts['lsbdistrelease']} is not supported")
   }
 
-  # here we go:
-  class {
-    'patching_status::install':
-      install_method => $install_method,
-      python_base    => $python_base,
-      user           => $user,
-      cron_hour      => $cron_hour,
-      cron_minute    => $cron_minute;
-    'patching_status::files':
-      web_base      => $web_base,
-      python_base   => $python_base,
-      user          => $user,
-      group         => $group,
-      puppetdb      => $puppetdb,
-      puppetdb_port => $puppetdb_port;
+  $package_name = $facts['os']['family'] ? {
+    'RedHat' => 'python3-requests',
+    'Debian' => 'python36-requests'
+  }
+
+  unless defined(Package[$package_name]) {
+    package { $package_name:
+      ensure => installed,
+      before => Exec['create_patching_status_venv']
+    }
+  }
+
+  cron { 'patching_status':
+    ensure  => present,
+    user    => $user,
+    command => "${script_base}/bin/puppetdb_json.py",
+    hour    => $cron_hour,
+    minute  => $cron_minute;
+  }
+
+  # let's use install as puppet could not create the full path
+  [$script_base, $web_base].each | $base_dir | {
+    exec { "install_${base_dir}_base":
+      command => "install -o ${user} -g ${group} -d ${base_dir}",
+      path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+      unless  => "test -d ${base_dir}";
+    }
+  }
+
+  file {
+    default:
+      ensure  => present,
+      owner   => $user,
+      group   => $group,
+      require => Exec['create_patching_status_venv'];
+    $web_base:
+      ensure  => directory,
+      recurse => true,
+      require => Exec["install_${web_base}_base"],
+      source  => "puppet:///modules/${module_name}/patching";
+    "${script_base}/puppetdb_json.py":
+      mode    => '0755',
+      require => Exec["install_${script_base}_base"],
+      content => epp("${module_name}/puppetdb_json.py.epp", { script_base => $script_base });
+    "${script_base}/.patching_status.conf":
+      content => epp("${module_name}/patching_status.conf.epp", {
+        web_base      => $web_base,
+        puppetdb      => $puppetdb,
+        puppetdb_port => $puppetdb_port,
+      });
+    "${web_base}/index.html":
+      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_updates' });
+    "${web_base}//index_sec_updates.html":
+      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_sec_updates' });
+    "${web_base}/index_reboot.html":
+      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_reboot' });
+    "${web_base}/index_certname.html":
+      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_certname' });
+    "${web_base}/index_lsbdistdescription.html":
+      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_lsbdistdescription' });
   }
 
 }
