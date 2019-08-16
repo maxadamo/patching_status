@@ -47,8 +47,8 @@ class patching_status (
   Integer $puppetdb_port = 8080,
   String $user = 'root',
   String $group = 'root',
-  Variant[String, Integer] $cron_hour = '*',
-  Variant[String, Integer] $cron_minute = fqdn_rand(60, $module_name),
+  Variant[String, Array, Integer] $cron_hour = '*',
+  Variant[String, Array, Integer] $cron_minute = fqdn_rand(60, $module_name),
   String $package_name = $facts['os']['family'] ? {
     'RedHat' => 'python36-requests',
     'Debian' => 'python3-requests'
