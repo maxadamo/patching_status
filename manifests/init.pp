@@ -72,7 +72,7 @@ class patching_status (
   cron { 'patching_status':
     ensure  => present,
     user    => $user,
-    command => "${script_base}/bin/puppetdb_json.py",
+    command => "${script_base}/puppetdb_json.py",
     hour    => $cron_hour,
     minute  => $cron_minute;
   }
