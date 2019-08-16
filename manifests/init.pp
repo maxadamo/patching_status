@@ -1,6 +1,6 @@
 # == Class: patching_status
 #
-# configure a web page to display system patches
+# configure a web page to display the patching status 
 # provided with the puppet module: albatrossflavour/os_patching
 #
 # === Parameters & Variables
@@ -30,6 +30,9 @@
 # [*cron_minute*] <String>
 #   default: fqdn_rand() (once in 1 hour)
 #
+# [*package_name*] <String>
+#   default: <os based> (the name of the package for Python Requests)
+#
 # === Credits
 #
 # Mountable: jQuery module to create a table from a json
@@ -46,6 +49,10 @@ class patching_status (
   String $group = 'root',
   Variant[String, Integer] $cron_hour = '*',
   Variant[String, Integer] $cron_minute = fqdn_rand(60, $module_name),
+  String $package_name = $facts['os']['family'] ? {
+    'RedHat' => 'python36-requests',
+    'Debian' => 'python3-requests'
+  }
 ) {
 
   # sanity checks
@@ -60,11 +67,6 @@ class patching_status (
     fail("${facts['os']['family']} ${facts['lsbdistrelease']} is not supported")
   }
 
-  $package_name = $facts['os']['family'] ? {
-    'RedHat' => 'python36-requests',
-    'Debian' => 'python3-requests'
-  }
-
   unless defined(Package[$package_name]) {
     package { $package_name: ensure => installed; }
   }
@@ -77,7 +79,7 @@ class patching_status (
     minute  => $cron_minute;
   }
 
-  # let's use install as puppet could not create the full path
+  # let's use "install" as puppet could not create the full paths
   [$script_base, $web_base].each | $base_dir | {
     exec { "install_${base_dir}_base":
       command => "install -o ${user} -g ${group} -d ${base_dir}",
