@@ -106,15 +106,15 @@ class patching_status (
         puppetdb_port => $puppetdb_port,
       });
     "${web_base}/index.html":
-      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_updates' });
-    "${web_base}//index_sec_updates.html":
-      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_sec_updates' });
+      content => epp("${module_name}/patching/index.html.epp", { json_file => 'puppetdb_updates' });
+    "${web_base}/index_sec_updates.html":
+      content => epp("${module_name}/patching/index.html.epp", { json_file => 'puppetdb_sec_updates' });
     "${web_base}/index_reboot.html":
-      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_reboot' });
+      content => epp("${module_name}/patching/index.html.epp", { json_file => 'puppetdb_reboot' });
     "${web_base}/index_certname.html":
-      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_certname' });
+      content => epp("${module_name}/patching/index.html.epp", { json_file => 'puppetdb_certname' });
     "${web_base}/index_lsbdistdescription.html":
-      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_lsbdistdescription' });
+      content => epp("${module_name}/patching/index.html.epp", { json_file => 'puppetdb_lsbdistdescription' });
   }
 
 }
