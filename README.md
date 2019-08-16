@@ -29,8 +29,8 @@ This example will setup the web page:
 
 ```puppet
 class { '::patching_status':
-  web_base    => /virtualenv/directory,
-  script_base => /webserver/directory,
+  web_base    => /webserver/directory,
+  script_base => /script/path,
   puppetdb    => '192.168.1.10';
 }
 ```
