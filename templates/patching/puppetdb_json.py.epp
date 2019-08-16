@@ -70,7 +70,7 @@ if __name__ == "__main__":
     SORTED_REBOOT = sorted(NEW_LIST, key=lambda k: k['reboot_required'], reverse=True)
     SORTED_CERTNAME = sorted(NEW_LIST, key=lambda k: k['certname'])
     SORTED_LSBDESC = sorted(NEW_LIST, key=lambda k: k['lsbdistdescription'])
-    TIMESTAMP_JS = """var mytimestamp = "This report was generated at {} GMT"
+    TIMESTAMP_JS = """var mytimestamp = "This report was generated on {} GMT"
 document.getElementById("factstimestamp").innerHTML = mytimestamp;\n""".format(TIMENOW)
 
     write_file('puppetdb_updates.json', SORTED_UPDT, WEB_BASE)
