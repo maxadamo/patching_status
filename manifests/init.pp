@@ -66,10 +66,7 @@ class patching_status (
   }
 
   unless defined(Package[$package_name]) {
-    package { $package_name:
-      ensure => installed,
-      before => Exec['create_patching_status_venv']
-    }
+    package { $package_name: ensure => installed; }
   }
 
   cron { 'patching_status':
