@@ -91,15 +91,13 @@ class patching_status (
       ensure  => present,
       owner   => $user,
       group   => $group,
-      require => Exec['create_patching_status_venv'];
+      require => Exec["install_${web_base}_base", "install_${script_base}_base"];
     $web_base:
       ensure  => directory,
       recurse => true,
-      require => Exec["install_${web_base}_base"],
       source  => "puppet:///modules/${module_name}/patching";
     "${script_base}/puppetdb_json.py":
       mode    => '0755',
-      require => Exec["install_${script_base}_base"],
       content => epp("${module_name}/puppetdb_json.py.epp", { script_base => $script_base });
     "${script_base}/.patching_status.conf":
       content => epp("${module_name}/patching_status.conf.epp", {
