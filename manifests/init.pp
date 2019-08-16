@@ -61,8 +61,8 @@ class patching_status (
   }
 
   $package_name = $facts['os']['family'] ? {
-    'RedHat' => 'python3-requests',
-    'Debian' => 'python36-requests'
+    'RedHat' => 'python36-requests',
+    'Debian' => 'python3-requests'
   }
 
   unless defined(Package[$package_name]) {
