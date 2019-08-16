@@ -55,16 +55,10 @@ class patching_status (
   }
 ) {
 
-  # sanity checks
-  if $facts['os']['family'] == 'RedHat' {
-    if $facts['lsbdistrelease'] == '6' {
-      fail('CentOS/RedHat 6 are not supported')
-    }
-  }
-  elsif $facts['os']['family'] == 'Debian' {
-    # we're good 
-  } else {
-    fail("${facts['os']['family']} ${facts['lsbdistrelease']} is not supported")
+  # every Linux is supported. We only need to install python3 requests
+  # whose name can be customized through the paramter: package_name
+  unless $facts['kernel'] == 'Linux' {
+    fail("${facts['kernel']} is not supported")
   }
 
   unless defined(Package[$package_name]) {

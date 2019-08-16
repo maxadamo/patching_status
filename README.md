@@ -42,7 +42,7 @@ Other parameters include:
 * cron_minute (default: once in 1 hour)
 * user (default: root. User to assign the files to and install the cron job)
 * group (default: root. Group to assign the files to)
-* install_method (default: ensure_packages. You can choose between `ensure_packages` and `package`. You can try the default first)
+* package_name (default: it's guessed based on OS name, but it can be changed)
 
 ## Screenshot
 
@@ -61,4 +61,4 @@ Spinner: JavaScript by [Pace](https://github.hubspot.com/pace/docs/welcome/)
 
 ## Limitations
 
-The module was tested only against Ubuntu 16.04, 18.04 and CentOS 7, but I'm confident that it will work on Debian as well. 
+The package name for Python Requests is guessed only for RedHat/Debian family, but it can be customized through the paramter `package_name`, hence the module should be compatible with any Linux flavour. 
