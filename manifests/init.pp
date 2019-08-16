@@ -100,7 +100,7 @@ class patching_status (
       mode    => '0755',
       content => epp("${module_name}/patching/puppetdb_json.py.epp", { script_base => $script_base });
     "${script_base}/.patching_status.conf":
-      content => epp("${module_name}/patching_status.conf.epp", {
+      content => epp("${module_name}/patching/patching_status.conf.epp", {
         web_base      => $web_base,
         puppetdb      => $puppetdb,
         puppetdb_port => $puppetdb_port,
