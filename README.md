@@ -4,7 +4,7 @@
 
 1. [Description](#description)
 1. [Requirements](#requirements)
-1. [Setup - Getting started with patching module](#setup)
+1. [Setup](#setup)
     * [Setting up patching_status](#setting-up-patching_status)
 1. [Screenshot](#screenshot)
 1. [Development](#development)
