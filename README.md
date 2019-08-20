@@ -50,8 +50,8 @@ Other parameters include:
 
 ## Development
 
-Want to see improvements? Please help! 
-I am not a front-end developer and I have glued together a bunch of iquery and scripts. 
+Want to see improvements? Please help!
+I am not a front-end developer and I have only glued together a bunch of jQuery and JavaScripts.
 
 ## Credits
 
@@ -61,4 +61,4 @@ Spinner: JavaScript by [Pace](https://github.hubspot.com/pace/docs/welcome/)
 
 ## Limitations
 
-The package name for Python Requests is guessed only for RedHat/Debian family, but it can be customized through the paramter `package_name`, hence the module should be compatible with any Linux flavour. 
+The package name for Python Requests is guessed only for RedHat/Debian family, but it can be customized through the paramter `package_name`, hence the module should be compatible with any Linux flavour on earth.
