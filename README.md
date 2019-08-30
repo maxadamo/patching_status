@@ -51,11 +51,11 @@ Other parameters include:
 ## Development
 
 Want to see improvements? Please help!
-I am not a front-end developer and I have only glued together a bunch of jQuery and JavaScripts.
+I am not a front-end developer and I have only glued together a bunch of jQuery scripts and JavaScripts.
 
 ## Credits
 
-Mountable: iQuery json-to-table by [Guilherme Augusto Madaleno](https://github.com/guimadaleno/mountable)
+Mountable: jQuery json-to-table by [Guilherme Augusto Madaleno](https://github.com/guimadaleno/mountable)
 
 Spinner: JavaScript by [Pace](https://github.hubspot.com/pace/docs/welcome/)
 
