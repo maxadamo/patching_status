@@ -1,0 +1,25 @@
+---
+stages:
+  - pdk_validate
+  - g10k_deploy
+  - send_notification
+
+job_validate:
+  stage: pdk_validate
+  script:
+    - "pdk validate metadata,puppet --parallel"
+
+job_deploy:
+  stage: g10k_deploy
+  when: on_success
+  script:
+    - /home/gitlab-runner/bin/ci2puppet.sh ${CI_PROJECT_NAME} ${CI_COMMIT_REF_NAME}
+
+job_notification:
+  stage: send_notification
+  when: on_failure
+  variables:
+    msg: "PDK validate:\nERROR detected on Commit ID: ${CI_COMMIT_SHA}\nCommit Author: ${GITLAB_USER_NAME}\nCommit Title: ${CI_COMMIT_TITLE}\nRepository: ${CI_PROJECT_NAME}\nBranch: ${CI_COMMIT_REF_NAME}.\nPlease consider running ./yamllint.sh from the hieradata repository"
+  script:
+    - /usr/local/bin/post_to_slack.sh "${msg}" "${SLACK_TOKEN}" "ERROR"
+    - echo "${msg}" | mail -s "PDK Error on Repository ${CI_PROJECT_NAME}" $RCPT
