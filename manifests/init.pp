@@ -91,26 +91,26 @@ class patching_status (
     $web_base:
       ensure  => directory,
       recurse => true,
-      source  => "puppet:///modules/${module_name}/patching";
+      source  => "puppet:///modules/${module_name}";
     "${script_base}/puppetdb_json.py":
       mode    => '0755',
-      content => epp("${module_name}/patching/puppetdb_json.py.epp", { script_base => $script_base });
+      content => epp("${module_name}/puppetdb_json.py.epp", { script_base => $script_base });
     "${script_base}/.patching_status.conf":
-      content => epp("${module_name}/patching/patching_status.conf.epp", {
+      content => epp("${module_name}/patching_status.conf.epp", {
         web_base      => $web_base,
         puppetdb      => $puppetdb,
         puppetdb_port => $puppetdb_port,
       });
     "${web_base}/index.html":
-      content => epp("${module_name}/patching/index.html.epp", { json_file => 'puppetdb_updates' });
+      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_updates' });
     "${web_base}/index_sec_updates.html":
-      content => epp("${module_name}/patching/index.html.epp", { json_file => 'puppetdb_sec_updates' });
+      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_sec_updates' });
     "${web_base}/index_reboot.html":
-      content => epp("${module_name}/patching/index.html.epp", { json_file => 'puppetdb_reboot' });
+      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_reboot' });
     "${web_base}/index_certname.html":
-      content => epp("${module_name}/patching/index.html.epp", { json_file => 'puppetdb_certname' });
+      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_certname' });
     "${web_base}/index_lsbdistdescription.html":
-      content => epp("${module_name}/patching/index.html.epp", { json_file => 'puppetdb_lsbdistdescription' });
+      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_lsbdistdescription' });
   }
 
 }
