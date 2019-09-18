@@ -61,4 +61,4 @@ Spinner: JavaScript by [Pace](https://github.hubspot.com/pace/docs/welcome/)
 
 ## Limitations
 
-The package name for Python Requests is guessed only for RedHat/Debian family, but it can be customized through the paramter `package_name`, hence the module is probably compatible with any Linux flavour on earth (running python3).
+The package name for Python Requests is guessed only for RedHat and Debian families, but it can be customized through the paramter `package_name`, hence the module is probably compatible with any Linux flavour on earth (running python3).
