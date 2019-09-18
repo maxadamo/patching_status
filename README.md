@@ -13,8 +13,8 @@
 
 ## Description
 
-This module sets up a the web pages which shows the patching status of your systems. The data are fed to PuppetDB through the scripts provided by the Puppet module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching), and this module pulls the data (through a cron job) from the PuppetDB and convert it in a HTML page.
-The module will copy the files that will be accessed by a web server, configure python virtualenv and set a crontab entry.
+This module sets up a web pages which shows the patching status of your systems. PuppetDB is fed by the scripts provided by the Puppet module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching), while this module pulls the data (through a cron job) from the PuppetDB and converts it to a HTML page.
+The module will take care of copying the files that will be accessed by a web server, configure a python script and set a crontab entry.
 
 ## Requirements
 
