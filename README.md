@@ -13,7 +13,7 @@
 
 ## Description
 
-This module sets up a web pages which shows the patching status of your systems. You first need to feed PuppetDB using the scripts provided with the Puppet module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching), then this module can pull the data (through a cron job) from the PuppetDB and converts it to a HTML page.
+This module sets up a web pages which shows the patching status of your systems. You first need to feed PuppetDB using the scripts provided with the Puppet module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching), then this module pulls the data (through a cron job) from the PuppetDB and converts it to a HTML page.
 
 ## Requirements
 
