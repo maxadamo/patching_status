@@ -1,6 +1,6 @@
 {
   "name": "maxadamo-patching_status",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Massimiliano Adamo <maxadamo@gmail.com>",
   "summary": "shows patching status in a web page",
   "license": "GPL-3.0",
