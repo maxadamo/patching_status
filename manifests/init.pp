@@ -89,7 +89,7 @@ class patching_status (
     exec { "install_${base_dir}_base":
       command => "install -o ${user} -g ${group} -d ${base_dir}",
       path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-      unless  => "test -d ${base_dir}";
+      creates => $base_dir;
     }
   }
 
