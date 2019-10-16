@@ -1,6 +1,6 @@
 {
   "name": "maxadamo-patching_status",
-  "version": "0.3.1",
+  "version": "0.3.5",
   "author": "Massimiliano Adamo <maxadamo@gmail.com>",
   "summary": "shows patching status in a web page",
   "license": "GPL-3.0",
@@ -10,7 +10,7 @@
   "dependencies": [
     {
       "name": "albatrossflavour-os_patching",
-      "version_requirement": ">= 0.8.0 <= 0.11.2"
+      "version_requirement": ">= 0.8.0 <= 0.13.0"
     }
   ],
   "operatingsystem_support": [
