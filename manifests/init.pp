@@ -53,7 +53,7 @@ class patching_status (
     'RedHat' => 'python36-requests',
     'Debian' => 'python3-requests'
   },
-  Optional[Strin] $package_name = undef
+  Optional[String] $package_name = undef
 ) {
 
   # every Linux is supported. We only need to install python3 requests
