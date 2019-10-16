@@ -30,8 +30,8 @@
 # [*cron_minute*] <String>
 #   default: fqdn_rand() (once in 1 hour)
 #
-# [*package_name*] <String>
-#   default: <os based> (the name of the package for Python Requests)
+# [*python3_requests_package_name*] <String>
+#   default: <os based> (the name of the package for Python3 Requests)
 #
 # === Credits
 #
@@ -49,20 +49,31 @@ class patching_status (
   String $group = 'root',
   Variant[String, Array, Integer] $cron_hour = '*',
   Variant[String, Array, Integer] $cron_minute = fqdn_rand(60, $module_name),
-  String $package_name = $facts['os']['family'] ? {
+  String $python3_requests_package_name = $facts['os']['family'] ? {
     'RedHat' => 'python36-requests',
     'Debian' => 'python3-requests'
-  }
+  },
+  Optional[Strin] $package_name = undef
 ) {
 
   # every Linux is supported. We only need to install python3 requests
-  # whose name can be customized through the paramter: package_name
+  # whose name can be customized through the paramter: python3_requests_package_name
   unless $facts['kernel'] == 'Linux' {
     fail("${facts['kernel']} is not supported")
   }
 
-  unless defined(Package[$package_name]) {
-    package { $package_name: ensure => installed; }
+  # sending a deprecation warning if package_name is still being used
+  if ($package_name) {
+    notify { 'deprecation message':
+      message => 'Please use the new parameter "python3_requests_package_name" instead of "package_name". This parameter will be removed from the next version';
+    }
+    $_python3_requests_package_name = $package_name
+  } else {
+    $_python3_requests_package_name = $python3_requests_package_name
+  }
+
+  unless defined(Package[$_python3_requests_package_name]) {
+    package { $_python3_requests_package_name: ensure => installed; }
   }
 
   cron { 'patching_status':
@@ -73,7 +84,7 @@ class patching_status (
     minute  => $cron_minute;
   }
 
-  # let's use "install" as puppet could not create the full paths
+  # let's use "install" as puppet could not easily create the full paths
   [$script_base, $web_base].each | $base_dir | {
     exec { "install_${base_dir}_base":
       command => "install -o ${user} -g ${group} -d ${base_dir}",

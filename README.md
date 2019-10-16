@@ -41,7 +41,7 @@ Other parameters include:
 * cron_minute (default: once in 1 hour)
 * user (default: root. User to assign the files to and install the cron job)
 * group (default: root. Group to assign the files to)
-* package_name (default: it's guessed based on OS name, but it can be changed)
+* python3_requests_package_name (default: it's guessed based on OS family.)
 
 ## Screenshot
 
@@ -60,4 +60,4 @@ Spinner: JavaScript by [Pace](https://github.hubspot.com/pace/docs/welcome/)
 
 ## Limitations
 
-The package name for Python Requests is guessed only for RedHat and Debian families, but it can be customized through the paramter `package_name`, hence the module is probably compatible with any Linux flavour on earth (running python3).
+The package name for Python Requests is guessed only for RedHat and Debian families, but it can be customized through the paramter `python3_requests_package_name`, hence the module is probably compatible with any Linux flavour on earth (running python3).
