@@ -50,8 +50,9 @@ class patching_status (
   Variant[String, Array, Integer] $cron_hour = '*',
   Variant[String, Array, Integer] $cron_minute = fqdn_rand(60, $module_name),
   String $python3_requests_package_name = $facts['os']['family'] ? {
-    'RedHat' => 'python36-requests',
-    'Debian' => 'python3-requests'
+    'Archlinux' => 'python-requests',
+    'Debian'    => 'python3-requests',
+    'RedHat'    => 'python36-requests',
   },
   Optional[String] $package_name = undef
 ) {

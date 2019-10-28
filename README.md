@@ -13,7 +13,7 @@
 
 ## Description
 
-This module sets up a web pages showing the patching status of your systems. First of all you need to feed PuppetDB using the scripts provided with the Puppet module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching), then this module pulls the data (through a cron job) from the PuppetDB and converts it to a HTML page.
+This module sets up a web page showing the patching status of your systems. First of all you need to feed PuppetDB using the scripts provided with the Puppet module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching), then this module pulls the data (through a cron job) from the PuppetDB and converts it to a HTML page.
 
 ## Requirements
 
@@ -60,4 +60,4 @@ Spinner: JavaScript by [Pace](https://github.hubspot.com/pace/docs/welcome/)
 
 ## Limitations
 
-The package name for Python Requests is guessed only for RedHat and Debian families, but it can be customized through the paramter `python3_requests_package_name`, hence the module is probably compatible with any Linux flavour on earth (running python3).
+The package name for Python Requests is guessed only for RedHat, Debian, Archlinux families, but it can be customized through the paramter `python3_requests_package_name`, hence the module is probably compatible with any Linux flavour on earth (running python3).

@@ -15,6 +15,11 @@
   ],
   "operatingsystem_support": [
     {
+      "operatingsystem": "Archlinux",
+      "operatingsystemrelease": [
+        "rolling"
+      ]
+    },    {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "7",
