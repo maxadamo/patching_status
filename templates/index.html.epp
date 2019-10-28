@@ -26,7 +26,7 @@
           <thead>
             <tr>
               <th><a href="index_certname.html">Cert name</a></th>
-              <th><a href="index_lsbdistdescription.html">OS version</a></th>
+              <th><a href="index_os_release.html">OS version</a></th>
               <th><a href="index.html">Updt count</a></th>
               <th>Updates list</th>
               <th><a href="index_sec_updates.html">Sec updt count</th>
@@ -38,7 +38,7 @@
           <tbody>
             <tr class="mountable-model">
               <td><input type="text" name="certname[]" class="form-control" readonly></td>
-              <td><input type="text" name="lsbdistdescription[]" class="form-control" readonly></td>
+              <td><input type="text" name="os_release[]" class="form-control" readonly></td>
               <td><input type="text" name="package_update_count[]" class="form-control" readonly></td>
               <td>
                 <select name="package_updates[]" class="form-control">

@@ -7,7 +7,6 @@
     -H 'Content-Type:application/json' \
     -d '{"query": ["and",["=", "name", "os_patching"]], "pretty": "true", "limit": 4}'
 """
-from ast import literal_eval
 import json
 import datetime
 import configparser
@@ -35,14 +34,14 @@ if __name__ == "__main__":
     WEB_BASE = CONFIG.get('patching', 'web_base')
     SUBKEYS_LIST = CONFIG.get('patching', 'subkeys_list')
     PARAMS = '{"query": ["and",["=", "name", "os_patching"]]}'
-    PARAMS_OS = '{"query": ["and",["=", "name", "lsbdistdescription"]]}'
+    PARAMS_OS = '{"query": ["and",["=", "name", "os"]]}'
 
     REQ = requests.post("http://{}:{}/pdb/query/v4/facts".format(
         PUPPETDB, PUPPETDB_PORT), PARAMS)
     REQ_OS = requests.post("http://{}:{}/pdb/query/v4/facts".format(
         PUPPETDB, PUPPETDB_PORT), PARAMS_OS)
     JSON_DATA = json.loads(REQ.text)
-    JSON_DATA_OS = literal_eval(REQ_OS.text)
+    JSON_DATA_OS = json.loads(REQ_OS.text)
     NEW_LIST = []
 
     for item in enumerate(JSON_DATA):
@@ -53,8 +52,11 @@ if __name__ == "__main__":
             if key == 'certname':
                 hostname = JSON_DATA[list_item][key]
                 NEW_LIST[list_item][key] = hostname
-                os_release = next(JSON_DATA_OS for JSON_DATA_OS in JSON_DATA_OS if JSON_DATA_OS["certname"] == hostname)['value'] #pylint: disable=C0301
-                NEW_LIST[list_item]['lsbdistdescription'] = os_release
+                # switching to os.name and os.release.full because lsb is not always installed
+                os_name = next(JSON_DATA_OS for JSON_DATA_OS in JSON_DATA_OS if JSON_DATA_OS["certname"] == hostname)['value']['name'] #pylint: disable=C0301
+                os_version = next(JSON_DATA_OS for JSON_DATA_OS in JSON_DATA_OS if JSON_DATA_OS["certname"] == hostname)['value']['release']['full'] #pylint: disable=C0301
+                os_release = "{} {}".format(os_name, os_version)
+                NEW_LIST[list_item]['os_release'] = os_release
             elif key == 'value':
                 for subkey, subvalue in JSON_DATA[list_item]['value'].items():
                     if subkey in SUBKEYS_LIST:
@@ -69,7 +71,7 @@ if __name__ == "__main__":
     SORTED_SECUPD = sorted(NEW_LIST, key=lambda k: k['security_package_update_count'], reverse=True)
     SORTED_REBOOT = sorted(NEW_LIST, key=lambda k: k['reboot_required'], reverse=True)
     SORTED_CERTNAME = sorted(NEW_LIST, key=lambda k: k['certname'])
-    SORTED_LSBDESC = sorted(NEW_LIST, key=lambda k: k['lsbdistdescription'])
+    SORTED_LSBDESC = sorted(NEW_LIST, key=lambda k: k['os_release'])
     TIMESTAMP_JS = """var mytimestamp = "This report was generated on {} GMT"
 document.getElementById("factstimestamp").innerHTML = mytimestamp;\n""".format(TIMENOW)
 
@@ -77,5 +79,5 @@ document.getElementById("factstimestamp").innerHTML = mytimestamp;\n""".format(T
     write_file('puppetdb_sec_updates.json', SORTED_SECUPD, WEB_BASE)
     write_file('puppetdb_reboot.json', SORTED_REBOOT, WEB_BASE)
     write_file('puppetdb_certname.json', SORTED_CERTNAME, WEB_BASE)
-    write_file('puppetdb_lsbdistdescription.json', SORTED_LSBDESC, WEB_BASE)
+    write_file('puppetdb_os_release.json', SORTED_LSBDESC, WEB_BASE)
     write_file('timestamp.js', TIMESTAMP_JS, WEB_BASE, dump=None)

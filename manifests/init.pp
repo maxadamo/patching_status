@@ -57,7 +57,7 @@ class patching_status (
 ) {
 
   # every Linux is supported. We only need to install python3 requests
-  # whose name can be customized through the paramter: python3_requests_package_name
+  # the name of the package can be customized through the paramter: python3_requests_package_name
   unless $facts['kernel'] == 'Linux' {
     fail("${facts['kernel']} is not supported")
   }
@@ -120,8 +120,10 @@ class patching_status (
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_reboot' });
     "${web_base}/index_certname.html":
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_certname' });
+    "${web_base}/index_os_release.html":
+      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_os_release' });
     "${web_base}/index_lsbdistdescription.html":
-      content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_lsbdistdescription' });
+      ensure => absent;
   }
 
 }
