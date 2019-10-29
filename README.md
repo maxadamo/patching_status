@@ -6,6 +6,7 @@
 1. [Requirements](#requirements)
 1. [Setup](#setup)
     * [Setting up patching_status](#setting-up-patching_status)
+    * [Enabling SSL](#enabling-ssl)
 1. [Screenshot](#screenshot)
 1. [Development](#development)
 1. [Credits](#credits)
@@ -42,6 +43,26 @@ Other parameters include:
 * user (default: root. User to assign the files to and install the cron job)
 * group (default: root. Group to assign the files to)
 * python3_requests_package_name (default: it's guessed based on OS family.)
+* ssl_enabled (default: undef. It can be set to `true` if your puppetDB has SSL)
+* ssl_cert (default: undef. PuppetDB certificate content)
+* ca_cer (default: undef. PuppetDB CA certificate content)
+* ssl_key (default: undef. PuppetDB certificate key content. It requires Sensitive datatype)
+
+### Enabling SSL
+
+The example below connect to PuppetDB using SSL (you probably may want to store the certificates in hiera and use variables instead). Sensitive is mandatory for the key:
+
+```puppet
+class { 'patching_status':
+  web_base    => /webserver/directory,
+  script_base => /script/path,
+  puppetdb    => '192.168.1.10',
+  ssl_enabled => true,
+  ssl_cert    => "-----BEGIN CERTIFICATE-----\nMIIF.....", # you can use a variable here
+  ca_cert     => "-----BEGIN CERTIFICATE-----\nMIIF.....", # you can use a variable here
+  ssl_key     => Sensitive("-----BEGIN CERTIFICATE-----\nMIIF....."); # you can use a variable here
+}
+```
 
 ## Screenshot
 
