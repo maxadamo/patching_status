@@ -88,13 +88,14 @@ class patching_status (
           require => Exec["install_${script_base}_base"],
           owner   => $user,
           group   => $group;
-        "${script_base}/puppet_db/certs":
+        "${script_base}/puppetdb_certs/certs":
           ensure => directory;
-        "${script_base}/puppet_db/cert.crt":
+        "${script_base}/puppetdb_certs/cert.crt":
           content => $ssl_cert;
-        "${script_base}/puppet_db/ca_cert.crt":
+        "${script_base}/puppetdb_certs/ca_cert.crt":
           content => $ca_cert;
-        "${script_base}/puppet_db/cert.key":
+        "${script_base}/puppetdb_certs/cert.key":
+          mode    => '0640',
           content => Sensitive($ssl_key.unwrap);
       }
     } else {
