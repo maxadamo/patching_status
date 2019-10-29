@@ -66,7 +66,7 @@ class patching_status (
     'Debian'    => 'python3-requests',
     'RedHat'    => 'python36-requests',
   },
-  Optional[Boolea] $ssl_enabled                = undef,
+  Optional[Boolena] $ssl_enabled               = undef,
   Optional[String] $ssl_cert                   = undef,  # ssl_cert content
   Optional[String] $ca_cert                    = undef,  # ca_cert content
   Optional[Sensitive] $ssl_key                 = undef,  # ssl_key content
