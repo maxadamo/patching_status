@@ -33,6 +33,18 @@
 # [*python3_requests_package_name*] <String>
 #   default: <os based> (the name of the package for Python3 Requests)
 #
+# [*ssl_enabled*] <Boolean>
+#   default: <undef> (set to true if you want to enable SSL)
+#
+# [*ssl_cert*] <String>
+#   default: <undef> (SSL certificate content)
+#
+# [*ca_cert*] <String>
+#   default: <undef> (CA certificate content)
+#
+# [*ssl_key*] <Sensitive>
+#   default: <undef> (SSL key content)
+#
 # === Credits
 #
 # Mountable: jQuery module to create a table from a json
@@ -44,37 +56,50 @@ class patching_status (
   Variant[Stdlib::IP::Address::Nosubnet, String] $puppetdb,
   Stdlib::Absolutepath $web_base,
   Stdlib::Absolutepath $script_base,
-  Integer $puppetdb_port = 8080,
-  String $user = 'root',
-  String $group = 'root',
-  Variant[String, Array, Integer] $cron_hour = '*',
+  Integer $puppetdb_port                       = 8080,
+  String $user                                 = 'root',
+  String $group                                = 'root',
+  Variant[String, Array, Integer] $cron_hour   = '*',
   Variant[String, Array, Integer] $cron_minute = fqdn_rand(60, $module_name),
-  String $python3_requests_package_name = $facts['os']['family'] ? {
+  String $python3_requests_package_name        = $facts['os']['family'] ? {
     'Archlinux' => 'python-requests',
     'Debian'    => 'python3-requests',
     'RedHat'    => 'python36-requests',
   },
-  Optional[String] $package_name = undef
+  Optional[Boolea] $ssl_enabled                = undef,
+  Optional[String] $ssl_cert                   = undef,  # ssl_cert content
+  Optional[String] $ca_cert                    = undef,  # ca_cert content
+  Optional[Sensitive] $ssl_key                 = undef,  # ssl_key content
 ) {
 
   # every Linux is supported. We only need to install python3 requests
-  # the name of the package can be customized through the paramter: python3_requests_package_name
   unless $facts['kernel'] == 'Linux' {
     fail("${facts['kernel']} is not supported")
   }
 
-  # sending a deprecation warning if package_name is still being used
-  if ($package_name) {
-    notify { 'deprecation message':
-      message => 'Please use the new parameter "python3_requests_package_name" instead of "package_name". This parameter will be removed from the next version';
-    }
-    $_python3_requests_package_name = $package_name
-  } else {
-    $_python3_requests_package_name = $python3_requests_package_name
+  unless defined(Package[$python3_requests_package_name]) {
+    package { $python3_requests_package_name: ensure => installed; }
   }
 
-  unless defined(Package[$_python3_requests_package_name]) {
-    package { $_python3_requests_package_name: ensure => installed; }
+  if ($ssl_enabled) {
+    if ($ssl_cert) and ($ca_cert) and ($ssl_key) {
+      file {
+        default:
+          require => Exec["install_${script_base}_base"],
+          owner   => $user,
+          group   => $group;
+        "${script_base}/puppet_db/certs":
+          ensure => directory;
+        "${script_base}/puppet_db/cert.crt":
+          content => $ssl_cert;
+        "${script_base}/puppet_db/ca_cert.crt":
+          content => $ca_cert;
+        "${script_base}/puppet_db/cert.key":
+          content => Sensitive($ssl_key.unwrap);
+      }
+    } else {
+      fail('ssl_enabled requires to set ssl_cert, ca_cert and ssl_key')
+    }
   }
 
   cron { 'patching_status':
@@ -109,6 +134,7 @@ class patching_status (
       content => epp("${module_name}/puppetdb_json.py.epp", { script_base => $script_base });
     "${script_base}/.patching_status.conf":
       content => epp("${module_name}/patching_status.conf.epp", {
+        script_base   => $script_base,
         web_base      => $web_base,
         puppetdb      => $puppetdb,
         puppetdb_port => $puppetdb_port,

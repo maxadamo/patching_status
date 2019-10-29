@@ -1,5 +1,11 @@
 [patching]
 
+ssl_enabled = <%= $ssl_enabled %>
+<% if $ssl_enabled { -%>
+ssl_cert = <%= $script_base %>/puppet_db/cert.crt
+ssl_key = <%= $script_base %>/puppet_db/cert.key
+ca_cert = <%= $script_base %>/puppet_db/ca_cert.crt
+<% } -%>
 web_base = <%= $web_base %>
 puppetdb = <%= $puppetdb %>
 puppetdb_port = <%= $puppetdb_port %>
