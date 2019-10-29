@@ -50,7 +50,7 @@ Other parameters include:
 
 ### Enabling SSL
 
-The example below connect to PuppetDB using SSL (you probably may want to store the certificates in hiera and use variables instead). Sensitive is mandatory for the key:
+The example below connect to PuppetDB using SSL (you probably may want to store the certificates in hiera and use variables instead). Sensitive datatype is mandatory for the key:
 
 ```puppet
 class { 'patching_status':
@@ -58,9 +58,9 @@ class { 'patching_status':
   script_base => /script/path,
   puppetdb    => '192.168.1.10',
   ssl_enabled => true,
-  ssl_cert    => "-----BEGIN CERTIFICATE-----\nMIIF.....", # you can use a variable here
-  ca_cert     => "-----BEGIN CERTIFICATE-----\nMIIF.....", # you can use a variable here
-  ssl_key     => Sensitive("-----BEGIN CERTIFICATE-----\nMIIF....."); # you can use a variable here
+  ssl_cert    => "-----BEGIN CERTIFICATE-----\nMIIF.....", # you may use a variable here
+  ca_cert     => "-----BEGIN CERTIFICATE-----\nMIIF.....", # you may use a variable here
+  ssl_key     => Sensitive("-----BEGIN CERTIFICATE-----\nMIIF....."); # you may use a variable here
 }
 ```
 
