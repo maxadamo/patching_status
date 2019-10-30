@@ -94,7 +94,8 @@ class patching_status (
           before => File[
             "${puppetdb_certs_dir}/cert.crt",
             "${puppetdb_certs_dir}/ca_cert.crt",
-            "${puppetdb_certs_dir}/cert.key"];
+            "${puppetdb_certs_dir}/cert.key"
+          ];
         "${puppetdb_certs_dir}/puppetdb_certs/cert.crt":
           content => $ssl_cert;
         "${puppetdb_certs_dir}/puppetdb_certs/ca_cert.crt":
