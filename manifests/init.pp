@@ -135,6 +135,7 @@ class patching_status (
       content => epp("${module_name}/puppetdb_json.py.epp", { script_base => $script_base });
     "${script_base}/.patching_status.conf":
       content => epp("${module_name}/patching_status.conf.epp", {
+        ssl_enabled   => $ssl_enabled,
         script_base   => $script_base,
         web_base      => $web_base,
         puppetdb      => $puppetdb,
