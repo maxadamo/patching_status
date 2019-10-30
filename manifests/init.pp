@@ -88,7 +88,7 @@ class patching_status (
           require => Exec["install_${script_base}_base"],
           owner   => $user,
           group   => $group;
-        "${script_base}/puppetdb_certs/certs":
+        "${script_base}/puppetdb_certs":
           ensure => directory;
         "${script_base}/puppetdb_certs/cert.crt":
           content => $ssl_cert;
