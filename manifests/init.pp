@@ -83,18 +83,23 @@ class patching_status (
 
   if ($ssl_enabled) {
     if ($ssl_cert) and ($ca_cert) and ($ssl_key) {
+      $puppetdb_certs_dir = "${script_base}/puppetdb_certs"
       file {
         default:
           require => Exec["install_${script_base}_base"],
           owner   => $user,
           group   => $group;
-        "${script_base}/puppetdb_certs":
-          ensure => directory;
-        "${script_base}/puppetdb_certs/cert.crt":
+        $puppetdb_certs_dir:
+          ensure => directory,
+          before => File[
+            "${puppetdb_certs_dir}/cert.crt",
+            "${puppetdb_certs_dir}/ca_cert.crt",
+            "${puppetdb_certs_dir}/cert.key"];
+        "${puppetdb_certs_dir}/puppetdb_certs/cert.crt":
           content => $ssl_cert;
-        "${script_base}/puppetdb_certs/ca_cert.crt":
+        "${puppetdb_certs_dir}/puppetdb_certs/ca_cert.crt":
           content => $ca_cert;
-        "${script_base}/puppetdb_certs/cert.key":
+        "${puppetdb_certs_dir}/puppetdb_certs/cert.key":
           mode    => '0640',
           content => Sensitive($ssl_key.unwrap);
       }
