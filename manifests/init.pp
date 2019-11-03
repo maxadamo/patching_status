@@ -157,8 +157,6 @@ class patching_status (
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_certname' });
     "${web_base}/index_os_release.html":
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_os_release' });
-    "${web_base}/index_lsbdistdescription.html":
-      ensure => absent;
   }
 
 }
