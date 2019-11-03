@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
     TIMENOW = str(datetime.datetime.now()).split('.')[0]
     CONFIG = configparser.RawConfigParser(allow_no_value=True)
-    CONFIG.read(SCRIPT_BASE, '.patching_status.conf')
+    CONFIG.read(os.path.join(SCRIPT_BASE, '.patching_status.conf'))
 
     SSL_ENABLED = CONFIG.get('patching', 'ssl_enabled')
     PUPPETDB = CONFIG.get('patching', 'puppetdb')
