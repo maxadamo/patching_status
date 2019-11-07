@@ -64,6 +64,20 @@ class { 'patching_status':
 }
 ```
 
+Alternatively, for Puppet Enterprise or similar setup where a client certificate can be used to connect to PuppetDB:
+```puppet
+class { 'patching_status':
+  web_base      => /webserver/directory,
+  script_base   => /script/path,
+  puppetdb      => '192.168.1.10',
+  ssl_enabled   => true,
+  ssl_cert_file => '/etc/puppetlabs/puppet/ssl/certs/certname.pem'
+  ca_cert_file  => '/etc/puppetlabs/puppet/ssl/certs/ca.pem'
+  ssl_key_file  => '/etc/puppetlabs/puppet/ssl/private_keys/certname.pem'
+}
+```
+In Puppet Enterprise, you will also need to add the host this class is running on to the whitelist at puppet_enterprise::profile::puppetdb::whitelisted_certnames.
+
 ## Screenshot
 
 ![Screenshot N/A](https://wiki.geant.org/download/attachments/126981072/patching_status.png  "Patching Status")
