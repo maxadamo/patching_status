@@ -37,13 +37,22 @@
 #   default: <undef> (set to true if you want to enable SSL)
 #
 # [*ssl_cert*] <String>
-#   default: <undef> (SSL certificate content)
+#   default: <undef> (SSL certificate content from hiera)
 #
 # [*ca_cert*] <String>
-#   default: <undef> (CA certificate content)
+#   default: <undef> (CA certificate content from hiera)
 #
 # [*ssl_key*] <Sensitive>
-#   default: <undef> (SSL key content)
+#   default: <undef> (SSL key content from hiera)
+#
+# [*ssl_cert_path*] <String>
+#   default: <undef> (File-system path for local SSL certificate)
+#
+# [*ca_cert_path*] <String>
+#   default: <undef> (File-system path for local CA certificate)
+#
+# [*ssl_key_path*] <String>
+#   default: <undef> (File-system path for local SSL certificate key)
 #
 # === Credits
 #
@@ -70,6 +79,9 @@ class patching_status (
   Optional[String] $ssl_cert                   = undef,  # ssl_cert content
   Optional[String] $ca_cert                    = undef,  # ca_cert content
   Optional[Sensitive] $ssl_key                 = undef,  # ssl_key content
+  Optional[String] $ssl_cert_path              = undef,  # ssl_cert file path
+  Optional[String] $ca_cert_path               = undef,  # ca_cert file path
+  Optional[String] $ssl_key_path               = undef,  # ssl_key file path
 ) {
 
   # every Linux is supported. We only need to install python3 requests
@@ -84,6 +96,9 @@ class patching_status (
   if ($ssl_enabled) {
     if ($ssl_cert) and ($ca_cert) and ($ssl_key) {
       $puppetdb_certs_dir = "${script_base}/puppetdb_certs"
+      $ssl_cert_file = "${puppetdb_certs_dir}/cert.crt"
+      $ca_cert_file = "${puppetdb_certs_dir}/ca_cert.crt"
+      $ssl_key_file = "${puppetdb_certs_dir}/cert.key"
       file {
         default:
           require => Exec["install_${script_base}_base"],
@@ -92,20 +107,24 @@ class patching_status (
         $puppetdb_certs_dir:
           ensure => directory,
           before => File[
-            "${puppetdb_certs_dir}/cert.crt",
-            "${puppetdb_certs_dir}/ca_cert.crt",
-            "${puppetdb_certs_dir}/cert.key"
+            $ssl_cert_file,
+            $ca_cert_file,
+            $ssl_key_file,
           ];
-        "${puppetdb_certs_dir}/puppetdb_certs/cert.crt":
+        $ssl_cert_file:
           content => $ssl_cert;
-        "${puppetdb_certs_dir}/puppetdb_certs/ca_cert.crt":
+        $ca_cert_file:
           content => $ca_cert;
-        "${puppetdb_certs_dir}/puppetdb_certs/cert.key":
+        $ssl_key_file:
           mode    => '0640',
           content => Sensitive($ssl_key.unwrap);
       }
+    } elsif ($ssl_cert_path) and ($ca_cert_path) and ($ssl_key_path) {
+      $ssl_cert_file = $ssl_cert_path
+      $ca_cert_file = $ca_cert_path
+      $ssl_key_file = $ssl_key_path
     } else {
-      fail('ssl_enabled requires to set ssl_cert, ca_cert and ssl_key')
+      fail('ssl_enabled requires certificate content or file-system paths to be set')
     }
   }
 
@@ -142,7 +161,9 @@ class patching_status (
     "${script_base}/.patching_status.conf":
       content => epp("${module_name}/patching_status.conf.epp", {
         ssl_enabled   => $ssl_enabled,
-        script_base   => $script_base,
+        ssl_cert_file => $ssl_cert_file,
+        ca_cert_file  => $ca_cert_file,
+        ssl_key_file  => $ssl_key_file,
         web_base      => $web_base,
         puppetdb      => $puppetdb,
         puppetdb_port => $puppetdb_port,
