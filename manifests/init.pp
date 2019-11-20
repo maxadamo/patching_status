@@ -131,7 +131,7 @@ class patching_status (
   cron { 'patching_status':
     ensure  => present,
     user    => $user,
-    command => "${script_base}/puppetdb_json.py",
+    command => "${script_base}/puppetdb_json.py ${script_base}",
     hour    => $cron_hour,
     minute  => $cron_minute;
   }
@@ -156,8 +156,8 @@ class patching_status (
       recurse => true,
       source  => "puppet:///modules/${module_name}";
     "${script_base}/puppetdb_json.py":
-      mode    => '0755',
-      content => epp("${module_name}/puppetdb_json.py.epp", { script_base => $script_base });
+      mode   => '0755',
+      source => "puppet:///modules/${module_name}/puppetdb_json.py";
     "${script_base}/.patching_status.conf":
       content => epp("${module_name}/patching_status.conf.epp", {
         ssl_enabled   => $ssl_enabled,
@@ -178,8 +178,6 @@ class patching_status (
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_certname' });
     "${web_base}/index_os_release.html":
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_os_release' });
-    "${web_base}/index_lsbdistdescription.html":
-      ensure => absent;
   }
 
 }

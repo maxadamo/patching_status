@@ -26,9 +26,16 @@ def write_file(file_name, file_content, file_path, dump=True):
 
 
 if __name__ == "__main__":
+
+    try:
+        SCRIPT_BASE = os.sys.argv[1]
+    except IndexError:
+        print('you must supply the script base dir as first argument')
+        os.sys.exit(1)
+
     TIMENOW = str(datetime.datetime.now()).split('.')[0]
     CONFIG = configparser.RawConfigParser(allow_no_value=True)
-    CONFIG.read('<%= $script_base %>/.patching_status.conf')
+    CONFIG.read(os.path.join(SCRIPT_BASE, '.patching_status.conf'))
 
     SSL_ENABLED = CONFIG.get('patching', 'ssl_enabled')
     PUPPETDB = CONFIG.get('patching', 'puppetdb')

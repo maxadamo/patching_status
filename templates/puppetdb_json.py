@@ -1,1 +1,0 @@
-puppetdb_json.py.epp
