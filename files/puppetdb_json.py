@@ -9,7 +9,7 @@
 """
 import os
 import json
-import datetime
+import time
 import configparser
 import requests
 
@@ -28,7 +28,7 @@ def write_file(file_name, file_content, file_path, dump=True):
 if __name__ == "__main__":
 
     SCRIPT_BASE = os.path.dirname(os.path.realpath(__file__))
-    TIMENOW = str(datetime.datetime.now()).split('.')[0]
+    TIMENOW = time.strftime('%Y-%m-%d %X %Z')
     CONFIG = configparser.RawConfigParser(allow_no_value=True)
     CONFIG.read(os.path.join(SCRIPT_BASE, '.patching_status.conf'))
 
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     SORTED_REBOOT = sorted(NEW_LIST, key=lambda k: k['reboot_required'], reverse=True)
     SORTED_CERTNAME = sorted(NEW_LIST, key=lambda k: k['certname'])
     SORTED_LSBDESC = sorted(NEW_LIST, key=lambda k: k['os_release'])
-    TIMESTAMP_JS = """var mytimestamp = "This report was generated on {} GMT"
+    TIMESTAMP_JS = """var mytimestamp = "This report was generated on {}"
 document.getElementById("factstimestamp").innerHTML = mytimestamp;\n""".format(TIMENOW)
 
     write_file('puppetdb_updates.json', SORTED_UPDT, WEB_BASE)
