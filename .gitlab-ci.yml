@@ -8,12 +8,16 @@ job_validate:
   stage: pdk_validate
   script:
     - "pdk validate metadata,puppet --parallel"
+  tags:
+    - shared-runner
 
 job_deploy:
   stage: g10k_deploy
   when: on_success
   script:
     - /home/gitlab-runner/bin/ci2puppet.sh ${CI_PROJECT_NAME} ${CI_COMMIT_REF_NAME}
+  tags:
+    - shared-runner
 
 job_notification:
   stage: send_notification
@@ -23,3 +27,5 @@ job_notification:
   script:
     - /usr/local/bin/post_to_slack.sh "${msg}" "${SLACK_TOKEN}" "ERROR"
     - echo "${msg}" | mail -s "PDK Error on Repository ${CI_PROJECT_NAME}" $RCPT
+  tags:
+    - shared-runner
