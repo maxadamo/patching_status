@@ -83,7 +83,6 @@ class patching_status (
   Optional[String] $ca_cert_path               = undef,  # ca_cert file path
   Optional[String] $ssl_key_path               = undef,  # ssl_key file path
 ) {
-
   # every Linux is supported. We only need to install python3 requests
   unless $facts['kernel'] == 'Linux' {
     fail("${facts['kernel']} is not supported")
@@ -126,6 +125,10 @@ class patching_status (
     } else {
       fail('ssl_enabled requires certificate content or file-system paths to be set')
     }
+  } else {
+    $ssl_cert_file = undef
+    $ca_cert_file = undef
+    $ssl_key_file = undef
   }
 
   cron { 'patching_status':
@@ -147,7 +150,6 @@ class patching_status (
 
   file {
     default:
-      ensure  => present,
       owner   => $user,
       group   => $group,
       require => Exec["install_${web_base}_base", "install_${script_base}_base"];
@@ -159,15 +161,17 @@ class patching_status (
       mode   => '0755',
       source => "puppet:///modules/${module_name}/puppetdb_json.py";
     "${script_base}/.patching_status.conf":
-      content => epp("${module_name}/patching_status.conf.epp", {
-        ssl_enabled   => $ssl_enabled,
-        ssl_cert_file => $ssl_cert_file,
-        ca_cert_file  => $ca_cert_file,
-        ssl_key_file  => $ssl_key_file,
-        web_base      => $web_base,
-        puppetdb      => $puppetdb,
-        puppetdb_port => $puppetdb_port,
-      });
+      content => epp("${module_name}/patching_status.conf.epp",
+        {
+          ssl_enabled   => $ssl_enabled,
+          ssl_cert_file => $ssl_cert_file,
+          ca_cert_file  => $ca_cert_file,
+          ssl_key_file  => $ssl_key_file,
+          web_base      => $web_base,
+          puppetdb      => $puppetdb,
+          puppetdb_port => $puppetdb_port,
+        }
+      );
     "${web_base}/index.html":
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_updates' });
     "${web_base}/index_sec_updates.html":
@@ -179,5 +183,4 @@ class patching_status (
     "${web_base}/index_os_release.html":
       content => epp("${module_name}/index.html.epp", { json_file => 'puppetdb_os_release' });
   }
-
 }
