@@ -1,6 +1,6 @@
 {
   "name": "maxadamo-patching_status",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "author": "Massimiliano Adamo <maxadamo@gmail.com>",
   "summary": "shows patching status in a web page",
   "license": "GPL-3.0",
@@ -48,15 +48,16 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "16.04",
-        "18.04"
+        "18.04",
+        "20.04",
+        "22.04"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.3.2 < 7.0.0"
+      "version_requirement": ">= 5.3.2 < 9.0.0"
     }
   ],
   "pdk-version": "1.13.0",
