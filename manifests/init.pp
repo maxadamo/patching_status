@@ -131,6 +131,14 @@ class patching_status (
     $ssl_key_file = undef
   }
 
+  if ($ssl_cert) and ($ssl_cert_file) {
+    fail('The parameters ssl_cert and ssl_cert_file path are mutually exclusive')
+  } elsif ($ca_cert) and ($ca_cert_file) {
+    fail('The parameters ca_cert and ca_cert_file path are mutually exclusive')
+  } elsif ($ssl_key) and ($ssl_key_file) {
+    fail('The parameters ssl_key and ssl_key_file path are mutually exclusive')
+  }
+
   cron { 'patching_status':
     ensure  => present,
     user    => $user,

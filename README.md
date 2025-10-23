@@ -15,20 +15,21 @@
 
 ## Project Status - Final Release
 
-:warning: This module is now in **maintenance-only** mode and this will be the **last release** of [maxadamo/patching_status](https://forge.puppet.com/maxadamo/patching_status).  
+:warning: This module is now in **maintenance-only** mode, and this will be the **last release** of [maxadamo/patching_status](https://forge.puppet.com/maxadamo/patching_status).  
 Future development continues in a new **containerized version**, which provides improved flexibility and easier deployment.
 
 :point_right: You can find the new container-based implementation here: [GEANT/docker-patching-status](https://codeberg.org/GEANT/docker-patching-status)
 
 ## Description
 
-This module sets up a web page showing the patching status of your systems. First of all you need to feed PuppetDB using the scripts provided with the Puppet module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching).  
+This module sets up a web page showing the patching status of your systems. First, you must use the scripts provided by the Puppet module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching).  
 It runs a scheduled job that pulls data from PuppetDB, which are then displayed on an HTML page.
 
 ## Requirements
 
 * Your web server of choice pointing to `web_base` directory
 * Your systems are already sending the patching status to the PuppetDB using the module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching)
+* If using the parameters `ssl_cert_file`, `ca_cert_file` and `ssl_key_file`, you need to use the Puppet file resource to create to create these files in advance.
 
 ## Setup
 
@@ -54,8 +55,11 @@ Other parameters include:
 * python3_requests_package_name (default: it's guessed based on OS family.)
 * ssl_enabled (default: undef. It can be set to `true` if your puppetDB has SSL)
 * ssl_cert (default: undef. PuppetDB certificate content)
-* ca_cer (default: undef. PuppetDB CA certificate content)
+* ca_cert (default: undef. PuppetDB CA certificate content)
 * ssl_key (default: undef. PuppetDB certificate key content. It requires Sensitive datatype)
+* ssl_cert_file: (default: undef. PuppetDB certificate path)
+* ca_cert_file: (default: undef. PuppetDB certificate path)
+* ssl_key_file: (default: undef. PuppetDB certificate path)
 
 ### Enabling SSL
 
@@ -87,6 +91,8 @@ class { 'patching_status':
 }
 ```
 
+You need to use the Puppet file resource to create `ssl_cert_file`, `ca_cert_file` and `ssl_key_file` files in advance.
+
 In Puppet Enterprise, you will also need to add the host this class is running on to the whitelist at puppet_enterprise::profile::puppetdb::whitelisted_certnames.
 
 ## Screenshot
@@ -106,4 +112,4 @@ Spinner: JavaScript by [Pace](https://github.hubspot.com/pace/docs/welcome/)
 
 ## Limitations
 
-The package name for Python Requests is guessed only for RedHat, Debian, Archlinux families, but it can be customized through the paramter `python3_requests_package_name`, hence the module is probably compatible with any Linux flavour on earth (running python3).
+The package name for Python Requests is guessed only for RedHat, Debian, Archlinux families, but it can be customized through the parameter `python3_requests_package_name`, hence the module is likely compatible with any Linux distribution running Python 3.
