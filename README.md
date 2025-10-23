@@ -2,24 +2,33 @@
 
 #### Table of Contents
 
-1. [Description](#description)
-1. [Requirements](#requirements)
-1. [Setup](#setup)
+1. [Project Status - Final Release](#project-status---final-release)
+2. [Description](#description)
+3. [Requirements](#requirements)
+4. [Setup](#setup)
     * [Setting up patching_status](#setting-up-patching_status)
     * [Enabling SSL](#enabling-ssl)
-1. [Screenshot](#screenshot)
-1. [Development](#development)
-1. [Credits](#credits)
-1. [Limitations - OS compatibility, etc.](#limitations)
+5. [Screenshot](#screenshot)
+6. [Development](#development)
+7. [Credits](#credits)
+8. [Limitations - OS compatibility, etc.](#limitations)
+
+## Project Status - Final Release
+
+:warning: This module is now in **maintenance-only** mode and this will be the **last release** of [maxadamo/patching_status](https://forge.puppet.com/maxadamo/patching_status).  
+Future development continues in a new **containerized version**, which provides improved flexibility and easier deployment.
+
+:point_right: You can find the new container-based implementation here: [GEANT/docker-patching-status](https://codeberg.org/GEANT/docker-patching-status)
 
 ## Description
 
-This module sets up a web page showing the patching status of your systems. First of all you need to feed PuppetDB using the scripts provided with the Puppet module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching), then this module pulls the data (through a cron job) from the PuppetDB and converts it to a HTML page.
+This module sets up a web page showing the patching status of your systems. First of all you need to feed PuppetDB using the scripts provided with the Puppet module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching).  
+It runs a scheduled job that pulls data from PuppetDB, which are then displayed on an HTML page.
 
 ## Requirements
 
-* Your web server of choice points to `web_base` directory
-* Your systems are already sending the patching status to the PuppetDB using the module `albatrossflavour/os_patching`
+* Your web server of choice pointing to `web_base` directory
+* Your systems are already sending the patching status to the PuppetDB using the module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching)
 
 ## Setup
 
@@ -58,13 +67,14 @@ class { 'patching_status':
   script_base => /script/path,
   puppetdb    => '192.168.1.10',
   ssl_enabled => true,
-  ssl_cert    => "-----BEGIN CERTIFICATE-----\nMIIF.....", # you may use a variable here
-  ca_cert     => "-----BEGIN CERTIFICATE-----\nMIIF.....", # you may use a variable here
-  ssl_key     => Sensitive("-----BEGIN CERTIFICATE-----\nMIIF....."); # you may use a variable here
+  ssl_cert    => "-----BEGIN CERTIFICATE-----\nMIIF.....",
+  ca_cert     => "-----BEGIN CERTIFICATE-----\nMIIF.....",
+  ssl_key     => Sensitive("-----BEGIN CERTIFICATE-----\nMIIF.....");
 }
 ```
 
 Alternatively, for Puppet Enterprise or similar setup where a client certificate can be used to connect to PuppetDB:
+
 ```puppet
 class { 'patching_status':
   web_base      => /webserver/directory,
@@ -76,6 +86,7 @@ class { 'patching_status':
   ssl_key_file  => '/etc/puppetlabs/puppet/ssl/private_keys/certname.pem'
 }
 ```
+
 In Puppet Enterprise, you will also need to add the host this class is running on to the whitelist at puppet_enterprise::profile::puppetdb::whitelisted_certnames.
 
 ## Screenshot

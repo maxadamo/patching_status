@@ -15,7 +15,7 @@
 # [*puppetdb*] <IP, String>
 #   default: not set (puppetDB IP or FQDN)
 #
-# [*puppetdb_port*] <Integer>
+# [*puppetdb_port*] <Stdlib::Port>
 #   default: 8080 (puppetDB TCP port)
 #
 # [*user*] <String>
@@ -45,13 +45,13 @@
 # [*ssl_key*] <Sensitive>
 #   default: <undef> (SSL key content from hiera)
 #
-# [*ssl_cert_path*] <String>
+# [*ssl_cert_path*] <Stdlib::Absolutepath>
 #   default: <undef> (File-system path for local SSL certificate)
 #
-# [*ca_cert_path*] <String>
+# [*ca_cert_path*] <Stdlib::Absolutepath>
 #   default: <undef> (File-system path for local CA certificate)
 #
-# [*ssl_key_path*] <String>
+# [*ssl_key_path*] <Stdlib::Absolutepath>
 #   default: <undef> (File-system path for local SSL certificate key)
 #
 # === Credits
@@ -65,23 +65,23 @@ class patching_status (
   Variant[Stdlib::IP::Address::Nosubnet, String] $puppetdb,
   Stdlib::Absolutepath $web_base,
   Stdlib::Absolutepath $script_base,
-  Integer $puppetdb_port                       = 8080,
-  String $user                                 = 'root',
-  String $group                                = 'root',
-  Variant[String, Array, Integer] $cron_hour   = '*',
-  Variant[String, Array, Integer] $cron_minute = fqdn_rand(60, $module_name),
-  String $python3_requests_package_name        = $facts['os']['family'] ? {
+  Stdlib::Port $puppetdb_port                   = 8080,
+  String $user                                  = 'root',
+  String $group                                 = 'root',
+  Variant[String, Array, Integer] $cron_hour    = '*',
+  Variant[String, Array, Integer] $cron_minute  = fqdn_rand(60, $module_name),
+  String $python3_requests_package_name         = $facts['os']['family'] ? {
     'Archlinux' => 'python-requests',
     'Debian'    => 'python3-requests',
     'RedHat'    => 'python36-requests',
   },
-  Optional[Boolean] $ssl_enabled               = undef,
-  Optional[String] $ssl_cert                   = undef,  # ssl_cert content
-  Optional[String] $ca_cert                    = undef,  # ca_cert content
-  Optional[Sensitive] $ssl_key                 = undef,  # ssl_key content
-  Optional[String] $ssl_cert_path              = undef,  # ssl_cert file path
-  Optional[String] $ca_cert_path               = undef,  # ca_cert file path
-  Optional[String] $ssl_key_path               = undef,  # ssl_key file path
+  Boolean $ssl_enabled                          = false,
+  Optional[String] $ssl_cert                    = undef,  # ssl_cert content
+  Optional[String] $ca_cert                     = undef,  # ca_cert content
+  Optional[Sensitive] $ssl_key                  = undef,  # ssl_key content
+  Optional[Stdlib::Absolutepath] $ssl_cert_path = undef,  # ssl_cert file path
+  Optional[Stdlib::Absolutepath] $ca_cert_path  = undef,  # ca_cert file path
+  Optional[Stdlib::Absolutepath] $ssl_key_path  = undef,  # ssl_key file path
 ) {
   # every Linux is supported. We only need to install python3 requests
   unless $facts['kernel'] == 'Linux' {
@@ -123,7 +123,7 @@ class patching_status (
       $ca_cert_file = $ca_cert_path
       $ssl_key_file = $ssl_key_path
     } else {
-      fail('ssl_enabled requires certificate content or file-system paths to be set')
+      fail('ssl_enabled requires certificate content or filesystem paths to be set')
     }
   } else {
     $ssl_cert_file = undef
@@ -139,7 +139,7 @@ class patching_status (
     minute  => $cron_minute;
   }
 
-  # let's use "install" as puppet could not easily create the full paths
+  # let's use "install" as puppet could not create the full paths with ease
   [$script_base, $web_base].each | $base_dir | {
     exec { "install_${base_dir}_base":
       command => "install -o ${user} -g ${group} -d ${base_dir}",
