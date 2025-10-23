@@ -29,7 +29,7 @@ It runs a scheduled job that pulls data from PuppetDB, which are then displayed 
 
 * Your web server of choice pointing to `web_base` directory
 * Your systems are already sending the patching status to the PuppetDB using the module [albatrossflavour/os_patching](https://forge.puppet.com/albatrossflavour/os_patching)
-* If using the parameters `ssl_cert_file`, `ca_cert_file` and `ssl_key_file`, you need to use the Puppet file resource to create to create these files in advance.
+* If using the parameters `ssl_cert_file`, `ca_cert_file` and `ssl_key_file`, you need to use the Puppet file resource to create these files in advance.
 
 ## Setup
 
